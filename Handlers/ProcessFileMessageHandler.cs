@@ -14,18 +14,25 @@ namespace ConsoleApp.Handlers
 
         public void EndProcess(Message message)
         {
-            Console.WriteLine($"end: {this.GetType().ToString()}");
-            _busManager.UpdateMesage(message);
+            T data = message as T;
+
+            DeleteFileMessage processFileMessage = new DeleteFileMessage(Guid.NewGuid(), Enums.States.Process, data.Name, data.Path);
+
+            _busManager.SendMesage(processFileMessage);
         }
 
         public void Handle(Message message)
         {
 
-            Console.WriteLine($"sleeping: {this.GetType().ToString()}");
-            Thread.Sleep(1000);
-            Console.WriteLine("awake");
-            //WriteFileData data = message.Data as WriteFileData;
-            //System.IO.File.Create(data.Name);
+            T data = message as T;
+            string path = $"{data.Path}/{data.Name}";
+
+            for (int i = 1; i < 10; i++)
+            {
+                File.WriteAllText(path, data.Name);
+
+            }
+            EndProcess(message);
         }
     }
 }

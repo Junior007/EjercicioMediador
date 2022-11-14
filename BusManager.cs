@@ -79,13 +79,15 @@ internal class BusManager
         var handlers = GetSuscribers(key).Select(s => s as IHandler);
 
         if (handlers != null)
-
+        {
             if (handlers != null)
                 Parallel.ForEach(handlers, handler =>
             {
                 handler.Handle(message);
             });
+        }
 
+        _queue.Remove(message.Id);
     }
 
     private IEnumerable<object> GetSuscribers(Type key)

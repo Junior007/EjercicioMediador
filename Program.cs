@@ -3,7 +3,7 @@
 
 using ConsoleApp.Enums;
 using ConsoleApp.Messages;
-//for (int i = 0; i < 1000000; i++)
+for (int i = 0; i < 10000; i++)
 {
     IMessageQueue queue = MessageQueue.Get();
 
@@ -11,12 +11,9 @@ using ConsoleApp.Messages;
 
     Guid messageId = Guid.NewGuid();
 
-
-
-    WriteFileMessage message = new WriteFileMessage(messageId, States.NotProcess, "test.txt") ;
+    WriteFileMessage message = new WriteFileMessage(messageId, States.NotProcess, $"test{i}.txt", "c:/temp");
 
     bus.SendMesage(message);
-    WriteFileMessage messageGet = bus.GetMesage<WriteFileMessage>(messageId) as WriteFileMessage;
 }
 Console.WriteLine("End");
 

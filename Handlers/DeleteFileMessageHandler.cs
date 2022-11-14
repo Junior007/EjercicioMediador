@@ -5,24 +5,28 @@ namespace ConsoleApp.Handlers
 {
     internal class DeleteFileMessageHandler<T> : IHandler<T> where T : DeleteFileMessage
     {
+        BusManager _busManager;
         public DeleteFileMessageHandler(BusManager busManager)
         {
-
+            _busManager = busManager;
         }
 
         public void EndProcess(Message message)
         {
-            Console.WriteLine($"end: {this.GetType().ToString()}");
+            //T data = message as T;
+
+            //DeleteFileMessage deleteFileMessage = new DeleteFileMessage(Guid.NewGuid(), Enums.States.StateLess, data.Name, data.Path);
+
+            //_busManager.SendMesage(deleteFileMessage);
         }
 
         public void Handle(Message message)
         {
+            T data = message as T;
+            string path = $"{data.Path}/{data.Name}";
 
-            Console.WriteLine($"sleeping: {this.GetType().ToString()}");
-            Thread.Sleep(1000);
-            Console.WriteLine("awake");
-            //WriteFileData data = message.Data as WriteFileData;
-            //System.IO.File.Create(data.Name);
+            File.Delete(path);
+
         }
     }
 }

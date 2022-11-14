@@ -15,18 +15,18 @@ namespace ConsoleApp.Handlers
         public void EndProcess(Message message)
         {
             T data = message as T;
-            //data.State= NotProcess
 
-            Console.WriteLine($"end: {this.GetType().ToString()}");
-            _busManager.UpdateMesage(message);
+            ProcessFileMessage processFileMessage = new ProcessFileMessage(Guid.NewGuid(),Enums.States.Process, data.Name, data.Path);
+
+            _busManager.SendMesage(processFileMessage);
         }
 
         public void Handle(Message message)
         {
-
             T data = message as T;
-            System.IO.File.Create(data.Name);
 
+            string path = $"{data.Path}/{data.Name}";
+            File.Create(data.Name);
 
             EndProcess(message);
         }
