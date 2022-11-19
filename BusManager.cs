@@ -2,7 +2,7 @@
 using ConsoleApp.Messages;
 using System.Text.Json;
 using ConsoleApp.Subscribers;
-internal class BusManager
+internal class BusManager : IBusManager
 {
     private IMessageQueue _queue;
     private static Dictionary<Type, List<object>> handlers;

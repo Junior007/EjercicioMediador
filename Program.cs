@@ -1,20 +1,23 @@
-﻿
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using ConsoleApp;
 
 
-using ConsoleApp.Enums;
-using ConsoleApp.Messages;
-for (int i = 0; i < 10000; i++)
-{
-    IMessageQueue queue = MessageQueue.Get();
+IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args);
 
-    BusManager bus = new BusManager(queue);
+hostBuilder.ConfigureServices((_, services) =>
+        services.AddTransient<Worker>()
+        .AddSingleton<IMessageQueue, MessageQueue>()
+        .AddSingleton<IBusManager,BusManager>());
 
-    Guid messageId = Guid.NewGuid();
+IHost host = hostBuilder.Build();
 
-    WriteFileMessage message = new WriteFileMessage(messageId, States.NotProcess, $"test{i}.txt", "c:/temp");
+using IServiceScope serviceScope = host.Services.CreateScope();
+IServiceProvider provider = serviceScope.ServiceProvider;
 
-    bus.SendMesage(message);
-}
-Console.WriteLine("End");
+Worker worker = provider.GetRequiredService<Worker>();
 
+worker.Run();
+
+await host.RunAsync();
 
