@@ -14,10 +14,8 @@ namespace ConsoleApp
         public void Run()
         {
 
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 2; i++)
             {
-
-
                 Guid messageId = Guid.NewGuid();
 
                 WriteFileMessage message = new WriteFileMessage(messageId, States.NotProcess, $"test{i}.txt", "c:/temp");

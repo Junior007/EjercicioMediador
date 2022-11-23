@@ -2,13 +2,11 @@
 using Microsoft.Extensions.Hosting;
 using ConsoleApp;
 
-
 IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args);
 
-hostBuilder.ConfigureServices((_, services) =>
-        services.AddTransient<Worker>()
-        .AddSingleton<IMessageQueue, MessageQueue>()
-        .AddSingleton<IBusManager,BusManager>());
+IoC.SetServices(hostBuilder);
+
+
 
 IHost host = hostBuilder.Build();
 

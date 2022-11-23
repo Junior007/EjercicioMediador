@@ -11,6 +11,7 @@ namespace ConsoleApp.Messages
             Type = this.GetType().ToString();
         }
 
+        public virtual bool IsNull => false;
         public Guid Id { get; private set; }
 
         public States State { get; private set; }

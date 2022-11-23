@@ -8,8 +8,8 @@ namespace ConsoleApp.Subscribers
 
     public interface IHandler
     {
-        public void Handle(Message message);
-        public void EndProcess(Message message);
+        public Message Handle(Message message);
+        //public void EndProcess(Message message);
 
     }
 }
