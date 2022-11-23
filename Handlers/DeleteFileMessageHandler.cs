@@ -11,8 +11,7 @@ namespace ConsoleApp.Handlers
             string path = $"{data.Path}/{data.Name}";
 
             File.Delete(path);
-            Console.WriteLine(this.ToString());
-            return new VoidMessage(Guid.NewGuid(), Enums.States.Process);
+            return new VoidMessage(Guid.NewGuid());
         }
     }
 }

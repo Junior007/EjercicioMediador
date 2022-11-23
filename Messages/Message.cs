@@ -1,20 +1,16 @@
-﻿using ConsoleApp.Enums;
-
-namespace ConsoleApp.Messages
+﻿namespace ConsoleApp.Messages
 {
     public abstract class Message
     {
-        public Message(Guid id, States state)
+        public Message(Guid id)
         {
             Id = id != Guid.Empty ? id : throw new ArgumentNullException();
-            State = state != States.StateLess ? state : throw new ArgumentNullException();
             Type = this.GetType().ToString();
         }
 
         public virtual bool IsNull => false;
         public Guid Id { get; private set; }
 
-        public States State { get; private set; }
 
         public string Type { get; private set; }
 

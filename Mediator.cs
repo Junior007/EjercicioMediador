@@ -1,7 +1,7 @@
 ﻿using ConsoleApp.Messages;
 using System.Text.Json;
 using ConsoleApp.Subscribers;
-internal class BusManager : IBusManager
+internal class Mediator : IMediator
 {
     private IMessageQueue _queue;
     private static Dictionary<Type, List<object>> handlers;
@@ -9,7 +9,7 @@ internal class BusManager : IBusManager
 
     IEnumerable<IHandler> _handlers;
 
-    public BusManager(IEnumerable<IHandler> handlers, IMessageQueue queue)
+    public Mediator(IEnumerable<IHandler> handlers, IMessageQueue queue)
     {
         _handlers = handlers ?? throw new ArgumentNullException(nameof(IEnumerable<IHandler>));
         _queue = queue;
@@ -19,7 +19,7 @@ internal class BusManager : IBusManager
         string jsonMessage = JsonSerializer.Serialize<T>(message);
         _queue.Put(message.Id, jsonMessage);
 
-        ExecuteSubscribers<T>(message);
+        ExecuteSubscribers<T>(message, false);
     }
 
     /*public void UpdateMesage<T>(T message) where T : Message
@@ -37,7 +37,7 @@ internal class BusManager : IBusManager
         return outMessage;
     }
 
-    private void ExecuteSubscribers<T>(Message message)
+    private void ExecuteSubscribers<T>(Message message, bool isSincrono)
     {
         Type key = message.GetMessageType();
 
@@ -45,25 +45,31 @@ internal class BusManager : IBusManager
 
         if (handlers != null)
         {
-            //Asincrono
-            /*Parallel.ForEach(handlers, handler =>
+            if (!isSincrono)
             {
-                Message resultMessage = handler.Handle(message);
-                SendMesage(message);
-            });*/
-
-            //Sincrono
-            foreach (IHandler handler in handlers)
+                //Asincrono
+                Parallel.ForEach(handlers, handler =>
+                {
+                    Execute(handler,message);
+                });
+            }
+            else
             {
-                Message resultMessage = handler.Handle(message);
-                SendMesage(resultMessage);
+                //Sincrono
+                foreach (IHandler handler in handlers)
+                {
+                    Execute(handler, message);
+                }
             }
         }
 
-
         _queue.Remove(message.Id);
     }
-
+    private void Execute(IHandler handler, Message message)
+    {
+        Message resultMessage = handler.Handle(message);
+        SendMesage(resultMessage);
+    }
     private IEnumerable<IHandler> GetSuscribers(Type key)
     {
         IEnumerable<IHandler> subscribers =

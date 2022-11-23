@@ -1,40 +1,30 @@
 ﻿
 internal class MessageQueue : IMessageQueue
 {
-    private static IMessageQueue _queue;
     private Dictionary<Guid, string> _messages;
     public MessageQueue()
     {
+        _messages = new Dictionary<Guid, string>();
     }
-    public static IMessageQueue Get()
-    {
-        _queue = _queue ?? new MessageQueue();
-        return _queue;
-    }
-
     public void Put(Guid id, string message)
     {
+        lock (this)
+            _messages.Add(id, message);
+    }
 
-        GetMessages().Add(id, message);
-    }
-    public void Update(Guid id, string message)
-    {
-        Remove(id);
-        Put(id, message);
-    }
     public string Get(Guid messageId)
     {
-        return GetMessages()[messageId];
-    }
-
-    private Dictionary<Guid, string> GetMessages()
-    {
-        _messages = _messages ?? new Dictionary<Guid, string>();
-        return _messages;
+        return _messages[messageId];
     }
 
     public void Remove(Guid messageId)
     {
-        GetMessages().Remove(messageId);
-    }
+        _messages.Remove(messageId);
+    }    
+    
+    /*public void Update(Guid id, string message)
+    {
+        Remove(id);
+        Put(id, message);
+    }*/
 }

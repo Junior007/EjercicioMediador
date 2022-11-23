@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Enums;
+﻿
 using ConsoleApp.Messages;
 
 
@@ -6,22 +6,31 @@ namespace ConsoleApp
 {
     internal class Worker
     {
-        IBusManager _bus;
-        public Worker(IBusManager bus)
+        IMediator _mediator;
+        public Worker(IMediator bus)
         {
-            _bus = bus;
+            _mediator = bus;
         }
         public void Run()
         {
+            var time1 = DateTime.Now;
 
-            for (int i = 0; i < 2; i++)
+            //Asincrono
+            var ixs = Enumerable.Range(0, 10);
+            Parallel.ForEach(ixs, i =>
             {
                 Guid messageId = Guid.NewGuid();
 
-                WriteFileMessage message = new WriteFileMessage(messageId, States.NotProcess, $"test{i}.txt", "c:/temp");
+                WriteFileMessage message = new WriteFileMessage(messageId, $"test{i}.txt", "c:/temp");
 
-                _bus.SendMesage(message);
-            }
+                _mediator.SendMesage(message);
+            });
+
+            TimeSpan timeSpan = DateTime.Now - time1;
+
+            Console.WriteLine(timeSpan.TotalMilliseconds);
+
+
             Console.WriteLine("End");
 
         }

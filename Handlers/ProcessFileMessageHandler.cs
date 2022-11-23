@@ -10,13 +10,12 @@ namespace ConsoleApp.Handlers
             T data = message as T;
             string path = $"{data.Path}/{data.Name}";
 
-            for (int i = 1; i < 10; i++)
+            for (int i = 1; i < 10000; i++)
             {
-                File.WriteAllText(path, data.Name);
+                File.AppendAllText(path, data.Name);
 
             }
-            Console.WriteLine(this.ToString());
-            return new ProcessedFileMessage(Guid.NewGuid(), Enums.States.Process, data.Name, data.Path);
+            return new ProcessedFileMessage(Guid.NewGuid(),  data.Name, data.Path);
         }
     }
 }

@@ -10,14 +10,14 @@ namespace ConsoleApp
     {
         internal static void SetServices(IHostBuilder hostBuilder)
         {
-            hostBuilder.ConfigureServices(XXXX);
+            hostBuilder.ConfigureServices(ConfigureServices);
         }
 
-        private static void XXXX(HostBuilderContext hostContext, IServiceCollection services)
+        private static void ConfigureServices(HostBuilderContext hostContext, IServiceCollection services)
         {
             services.AddTransient<Worker>()
                     .AddSingleton<IMessageQueue, MessageQueue>()
-                    .AddSingleton<IBusManager, BusManager>();
+                    .AddSingleton<IMediator, Mediator>();
 
 
             services.Add(new ServiceDescriptor(typeof(IHandler), typeof(WriteFileMessageHandler<WriteFileMessage>), ServiceLifetime.Singleton));

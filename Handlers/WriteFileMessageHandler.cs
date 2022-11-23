@@ -12,8 +12,7 @@ namespace ConsoleApp.Handlers
             string path = $"{data.Path}/{data.Name}";
             File.Create(data.Name);
 
-            Console.WriteLine(this.ToString());
-            return new WritedFileMessage(Guid.NewGuid(), Enums.States.Process, data.Name, data.Path);
+            return new WritedFileMessage(Guid.NewGuid(), data.Name, data.Path);
         }
     }
 }

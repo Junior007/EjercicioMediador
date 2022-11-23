@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestBusInstance\**" />
+    <EmbeddedResource Remove="TestBusInstance\**" />
+    <None Remove="TestBusInstance\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Handlers\Handler.cs" />
     <Compile Remove="Messages\ProcessFilesMessage.cs" />
     <Compile Remove="Handlers\ISubscriber.cs" />
@@ -20,6 +26,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Enums\" />
   </ItemGroup>
 
 </Project>
