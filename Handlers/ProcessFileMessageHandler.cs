@@ -5,7 +5,7 @@ namespace ConsoleApp.Handlers
 {
     internal class ProcessFileMessageHandler<T> : IHandler<T> where T : WritedFileMessage
     {
-        public Message Handle(Message message)
+        public HandlerResult Handle(Message message)
         {
             T data = message as T;
             string path = $"{data.Path}/{data.Name}";
@@ -15,7 +15,8 @@ namespace ConsoleApp.Handlers
                 File.AppendAllText(path, data.Name);
 
             }
-            return new ProcessedFileMessage(Guid.NewGuid(),  data.Name, data.Path);
+
+            return new HandlerResult(true, new ProcessedFileMessage(Guid.NewGuid(), data.Name, data.Path));
         }
     }
 }

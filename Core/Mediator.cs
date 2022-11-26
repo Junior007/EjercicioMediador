@@ -1,6 +1,8 @@
 ﻿using ConsoleApp.Messages;
 using System.Text.Json;
 using ConsoleApp.Subscribers;
+using ConsoleApp.Handlers;
+
 internal class Mediator : IMediator
 {
     private IMessageQueue _queue;
@@ -50,7 +52,7 @@ internal class Mediator : IMediator
                 //Asincrono
                 Parallel.ForEach(handlers, handler =>
                 {
-                    Execute(handler,message);
+                    Execute(handler, message);
                 });
             }
             else
@@ -67,8 +69,18 @@ internal class Mediator : IMediator
     }
     private void Execute(IHandler handler, Message message)
     {
-        Message resultMessage = handler.Handle(message);
-        SendMesage(resultMessage);
+
+        HandlerResult result = handler.Handle(message);
+        if (result.Success)
+        {
+            Message resultMessage = result.Message; ;
+            SendMesage(resultMessage);
+        }
+        else
+        {
+            //write in failed queau
+
+        }
     }
     private IEnumerable<IHandler> GetSuscribers(Type key)
     {

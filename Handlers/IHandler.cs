@@ -1,4 +1,5 @@
-﻿using ConsoleApp.Messages;
+﻿using ConsoleApp.Handlers;
+using ConsoleApp.Messages;
 
 namespace ConsoleApp.Subscribers
 {
@@ -8,7 +9,7 @@ namespace ConsoleApp.Subscribers
 
     public interface IHandler
     {
-        public Message Handle(Message message);
+        public HandlerResult Handle(Message message);
         //public void EndProcess(Message message);
 
     }
