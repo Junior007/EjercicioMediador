@@ -18,26 +18,18 @@ internal class Mediator : IMediator
         _queue = queue;
         _errorQueue = errorQueue;
     }
-    public void SendMesage<T>(T message) where T : Message
+    public void SendMesage(Message message) 
     {
-        string jsonMessage = JsonSerializer.Serialize<T>(message);
+        string jsonMessage = JsonSerializer.Serialize<Message>(message);
         _queue.Put(message.Id, jsonMessage);
 
-        ExecuteSubscribers<T>(message, false);
+        ExecuteSubscribers<Message>(message, false);
     }
 
-    /*public void UpdateMesage<T>(T message) where T : Message
-    {
-        string jsonMessage = JsonSerializer.Serialize<T>(message);
-        _queue.Update(message.Id, jsonMessage);
-
-        ExecuteSubscribers<T>(message);
-    }*/
-
-    public T GetMesage<T>(Guid messageId) where T : Message
+    public Message GetMesage(Guid messageId)
     {
         string jsonMessage = _queue.Get(messageId);
-        T outMessage = JsonSerializer.Deserialize<T>(jsonMessage);
+        Message outMessage = JsonSerializer.Deserialize<Message>(jsonMessage);
         return outMessage;
     }
 
@@ -111,4 +103,6 @@ internal class Mediator : IMediator
 
         return subscribers;
     }
+
+
 }
