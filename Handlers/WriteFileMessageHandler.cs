@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Messages;
+﻿using ConsoleApp.Handlers.Messages;
 using ConsoleApp.Subscribers;
 
 namespace ConsoleApp.Handlers
@@ -11,7 +11,7 @@ namespace ConsoleApp.Handlers
 
             string path = $"{data.Path}/{data.Name}";
             File.Create(data.Name);
-            return new HandlerResult(true,new WritedFileMessage(Guid.NewGuid(), data.Name, data.Path));
+            return new HandlerResult(true,new WritedFileMessage(Guid.NewGuid(), data.Name, data.Path), new VoidMessage(Guid.NewGuid()));
         }
     }
 }

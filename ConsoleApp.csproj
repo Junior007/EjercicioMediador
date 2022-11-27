@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <Compile Remove="Handlers\Handler.cs" />
-    <Compile Remove="Messages\ProcessFilesMessage.cs" />
     <Compile Remove="Handlers\ISubscriber.cs" />
   </ItemGroup>
 

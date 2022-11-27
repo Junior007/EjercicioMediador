@@ -1,5 +1,5 @@
 ﻿using ConsoleApp.Handlers;
-using ConsoleApp.Messages;
+using ConsoleApp.Handlers.Messages;
 using ConsoleApp.Subscribers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,6 +17,7 @@ namespace ConsoleApp
         {
             services.AddTransient<Worker>()
                     .AddSingleton<IMessageQueue, MessageQueue>()
+                    .AddSingleton<IErrorQueue, ErrorQueue>()
                     .AddSingleton<IMediator, Mediator>();
 
 

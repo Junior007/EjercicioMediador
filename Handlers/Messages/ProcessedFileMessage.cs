@@ -1,11 +1,10 @@
-﻿namespace ConsoleApp.Messages
+﻿namespace ConsoleApp.Handlers.Messages
 {
-    public class WriteFileMessage : Message
+    public class ProcessedFileMessage : Message
     {
         public string Name { get; private set; }
         public string Path { get; private set; }
-
-        public WriteFileMessage(Guid id, string name, string path) : base(id)
+        public ProcessedFileMessage(Guid id,string name, string path) : base(id)
         {
             Name = name;
             Path = path;

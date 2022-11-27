@@ -1,5 +1,5 @@
 ﻿using ConsoleApp.Handlers;
-using ConsoleApp.Messages;
+using ConsoleApp.Handlers.Messages;
 
 namespace ConsoleApp.Subscribers
 {

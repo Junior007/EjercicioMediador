@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Messages;
+﻿using ConsoleApp.Handlers.Messages;
 using ConsoleApp.Subscribers;
 
 namespace ConsoleApp.Handlers
@@ -11,7 +11,7 @@ namespace ConsoleApp.Handlers
             string path = $"{data.Path}/{data.Name}";
 
             File.Delete(path);
-            return new HandlerResult(true, new VoidMessage(Guid.NewGuid()));
+            return new HandlerResult(true, new VoidMessage(Guid.NewGuid()), new VoidMessage(Guid.NewGuid()));
         }
     }
 }

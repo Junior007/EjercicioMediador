@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Messages;
+﻿using ConsoleApp.Handlers.Messages;
 using System.Text.Json;
 using ConsoleApp.Subscribers;
 using ConsoleApp.Handlers;
@@ -6,15 +6,17 @@ using ConsoleApp.Handlers;
 internal class Mediator : IMediator
 {
     private IMessageQueue _queue;
+    private IErrorQueue _errorQueue;
     private static Dictionary<Type, List<object>> handlers;
 
 
     IEnumerable<IHandler> _handlers;
 
-    public Mediator(IEnumerable<IHandler> handlers, IMessageQueue queue)
+    public Mediator(IEnumerable<IHandler> handlers, IMessageQueue queue, IErrorQueue errorQueue)
     {
         _handlers = handlers ?? throw new ArgumentNullException(nameof(IEnumerable<IHandler>));
         _queue = queue;
+        _errorQueue = errorQueue;
     }
     public void SendMesage<T>(T message) where T : Message
     {
@@ -70,18 +72,37 @@ internal class Mediator : IMediator
     private void Execute(IHandler handler, Message message)
     {
 
-        HandlerResult result = handler.Handle(message);
-        if (result.Success)
+        try
         {
-            Message resultMessage = result.Message; ;
-            SendMesage(resultMessage);
+            HandlerResult result = handler.Handle(message);
+            if (result.Success)
+            {
+                Message resultMessage = result.Message; ;
+                SendMesage(resultMessage);
+            }
+            else
+            {
+                SendErrorMessage(result);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            //write in failed queau
-
+            SendException(ex);
         }
     }
+
+    private void SendException(Exception ex) 
+    {
+        string jsonMessage = JsonSerializer.Serialize<Exception>(ex);
+        _errorQueue.Put(Guid.NewGuid(), jsonMessage);
+    }
+
+    private void SendErrorMessage(HandlerResult result)
+    {
+        string jsonMessage = JsonSerializer.Serialize<Message>(result.WarningMessage);
+        _errorQueue.Put(Guid.NewGuid(), jsonMessage);
+    }
+
     private IEnumerable<IHandler> GetSuscribers(Type key)
     {
         IEnumerable<IHandler> subscribers =

@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Messages;
+﻿using ConsoleApp.Handlers.Messages;
 
 internal interface IMediator
 {

@@ -1,4 +1,4 @@
-﻿using ConsoleApp.Messages;
+﻿using ConsoleApp.Handlers.Messages;
 using ConsoleApp.Subscribers;
 
 namespace ConsoleApp.Handlers
@@ -16,7 +16,7 @@ namespace ConsoleApp.Handlers
 
             }
 
-            return new HandlerResult(true, new ProcessedFileMessage(Guid.NewGuid(), data.Name, data.Path));
+            return new HandlerResult(true, new ProcessedFileMessage(Guid.NewGuid(), data.Name, data.Path), new VoidMessage(Guid.NewGuid()));
         }
     }
 }

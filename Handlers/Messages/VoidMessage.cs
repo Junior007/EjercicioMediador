@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp.Messages
+﻿namespace ConsoleApp.Handlers.Messages
 {
     public class VoidMessage : Message
     {
